@@ -1,0 +1,22 @@
+2025-09-24T20:20:18.179Z [INFO] ----------------------invoke generate_upgrade_plan_for_java_project----------------------
+2025-09-24T20:20:18.181Z [INFO] [Tool.invoke]({name: generate_upgrade_plan_for_java_project, input: {
+  "projectPath": "c:\\Users\\PRECIOUS\\Desktop\\CASINO MGT\\MyCasino",
+  "targetJavaVersion": "21"
+}}).
+2025-09-24T20:20:18.183Z [INFO] [Plan.tryStartTask]({tool:generate_upgrade_plan_for_java_project, nextTask:{type:undefined, tool:undefined}}
+2025-09-24T20:20:18.184Z [INFO] [Plan.tryStartTask]: no next task, create new one.
+2025-09-24T20:20:18.185Z [INFO] [Plan.createTaskAtStart]({tool: generate_upgrade_plan_for_java_project, input: {
+  "projectPath": "c:\\Users\\PRECIOUS\\Desktop\\CASINO MGT\\MyCasino",
+  "targetJavaVersion": "21",
+  "sessionId": "20250924202017"
+}}).
+2025-09-24T20:20:18.398Z [INFO] [Plan.tryStartTask]: starting currentTask
+2025-09-24T20:20:18.399Z [INFO] [Task.start](): Starting task generatePlan
+2025-09-24T20:20:18.402Z [INFO] [Task.start](1): Started task generatePlan
+2025-09-24T20:21:00.369Z [INFO] [Tool.invoke] validate GitHub Copilot license.
+2025-09-24T20:27:37.006Z [INFO] Copilot user info:undefined
+2025-09-24T20:27:37.009Z [WARN] "GitHub Copilot app modernization - upgrade for Java" and its tools are only available for GitHub Copilot "Pro", "Pro+", "Business" and "Enterprise" plans.
+2025-09-24T20:27:37.011Z [ERROR] [Tool.invoke] error occurs when invoking tool generate_upgrade_plan_for_java_project: UserError: "GitHub Copilot app modernization - upgrade for Java" and its tools are only available for GitHub Copilot "Pro", "Pro+", "Business" and "Enterprise" plans.. Please upgrade your GitHub Copilot plan to use this feature or upgrading this project using other tools you prefer..
+2025-09-24T20:27:37.013Z [INFO] [Task.complete](1): Completing task generatePlan
+2025-09-24T20:27:37.015Z [INFO] ----------------------invoked generate_upgrade_plan_for_java_project----------------------
+2025-09-24T20:27:37.017Z [INFO] [Task.complete](1): Completed task generatePlan
