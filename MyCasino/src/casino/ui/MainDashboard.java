@@ -153,33 +153,31 @@ public class MainDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void menuAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAdminActionPerformed
-        new CasinoDashboard("Admin").setVisible(true);
-        this.dispose();
-        
+      new CasinoLogin().setVisible(true);
+      this.dispose();
     }//GEN-LAST:event_menuAdminActionPerformed
 
     private void menuCashierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCashierActionPerformed
-       Cashier.CashierMain();
-       this.dispose();
+       new CasinoLogin().setVisible(true);
+      this.dispose();
     }//GEN-LAST:event_menuCashierActionPerformed
 
     private void menuSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSecurityActionPerformed
-       Security.SecurityMain();
-       this.dispose();
+       new CasinoLogin().setVisible(true);
+      this.dispose();
     }//GEN-LAST:event_menuSecurityActionPerformed
 
     private void menuRestaurantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRestaurantActionPerformed
-        RestuarantManagement.RestuarantMain();
-        this.dispose();
+       new CasinoLogin().setVisible(true);
+      this.dispose();
     }//GEN-LAST:event_menuRestaurantActionPerformed
 
     private void menuGamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGamesActionPerformed
-        Games.MainGame();
-        this.dispose();
+        new CasinoLogin().setVisible(true);
+      this.dispose();
     }//GEN-LAST:event_menuGamesActionPerformed
 
     /**
-     * @param args the command line arguments
      */
     public static void MainDashboardMain() {
         /* Set the Nimbus look and feel */
@@ -206,10 +204,8 @@ public class MainDashboard extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainDashboard().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainDashboard().setVisible(true);
         });
     }
 

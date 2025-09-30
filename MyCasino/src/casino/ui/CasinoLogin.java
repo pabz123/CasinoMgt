@@ -99,8 +99,9 @@ public class CasinoLogin extends JFrame {
                 JOptionPane.showMessageDialog(this, "Welcome " + username);
                 
                  if (role.equalsIgnoreCase("Admin")) {
-                     MainDashboard.MainDashboardMain();
-                dispose();
+                    new CasinoDashboard("Admin").setVisible(true);
+                    this.dispose();
+        
                      
             //addButton("Manage Customers", "👤");
             //buttons.get("Manage Customers").addActionListener(e ->{
@@ -134,22 +135,23 @@ public class CasinoLogin extends JFrame {
                 //  this.dispose();
            // });
         } else if (role.equalsIgnoreCase("Cashier")) {
-           MainDashboard.MainDashboardMain();
+           Cashier.CashierMain();
             this.dispose();
             //addButton("Transactions", "💳");
             //addButton("Payments", "💵");
         } else if (role.equalsIgnoreCase("Security")) {
-            MainDashboard.MainDashboardMain();
+            Security.SecurityMain();
             this.dispose();
             //addButton("Security Staff", "🛡");
            // addButton("Incidents", "🚨");
         }
         else if(role.equalsIgnoreCase("Game Manager")){
-        MainDashboard.MainDashboardMain();
+        Games.MainGame();
         this.dispose();
         }  
          else if(role.equalsIgnoreCase("Restuarant Manager")){
-        MainDashboard.MainDashboardMain();
+        RestuarantManagement.RestuarantMain();
+       
         this.dispose();}  
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid login, try again.");

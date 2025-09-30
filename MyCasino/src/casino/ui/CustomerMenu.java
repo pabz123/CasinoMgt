@@ -384,8 +384,8 @@ ResultSet rs;
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-           MainDashboard.MainDashboardMain();
-           this.dispose();
+          new CasinoDashboard("Admin").setVisible(true);
+                    this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed

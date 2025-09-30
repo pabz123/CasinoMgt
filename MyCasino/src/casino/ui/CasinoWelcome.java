@@ -27,7 +27,7 @@ public class CasinoWelcome extends JFrame {
         btnEnter.setFocusPainted(false);
         btnEnter.setFont(new Font("Arial", Font.BOLD, 18));
         btnEnter.addActionListener(e -> {
-            new CasinoLogin().setVisible(true);
+            MainDashboard.MainDashboardMain();
             dispose();
         });
 

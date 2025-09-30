@@ -188,8 +188,8 @@ public class Restuarant extends javax.swing.JFrame {
     }//GEN-LAST:event_ComboAccomodationActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        MainDashboard.MainDashboardMain();
-        this.dispose();
+       new CasinoDashboard("Admin").setVisible(true);
+                    this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
@@ -235,7 +235,8 @@ public class Restuarant extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-       this.dispose();
+       new CasinoDashboard("Admin").setVisible(true);
+                    this.dispose();
     }//GEN-LAST:event_btnExitActionPerformed
 
     /**
