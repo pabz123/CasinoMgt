@@ -5,6 +5,18 @@
 package casino.ui;
 
 import javax.swing.JOptionPane;
+import casino.db.DBConnection;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import java.awt.event.ActionEvent;
 import java.sql.Connection;
@@ -15,6 +27,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 /**
 
 /**
@@ -75,6 +88,7 @@ public class RestuarantManagement extends javax.swing.JFrame {
         btnAddrestaurant = new javax.swing.JButton();
         btnDeleteRestaurant = new javax.swing.JButton();
         btnPreviousRestaurant = new javax.swing.JButton();
+        btnReportRestaurants = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         lblRestaurant = new javax.swing.JLabel();
@@ -90,6 +104,7 @@ public class RestuarantManagement extends javax.swing.JFrame {
         btnExitMenu = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
         btnPrevious = new javax.swing.JButton();
+        BtnReportMenu = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         lblOrderid = new javax.swing.JLabel();
@@ -107,6 +122,7 @@ public class RestuarantManagement extends javax.swing.JFrame {
         txtQuantity = new javax.swing.JTextField();
         btnAddOrder = new javax.swing.JButton();
         btnDeleteOrder = new javax.swing.JButton();
+        BtnReportOrders = new javax.swing.JButton();
         btnHome = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
@@ -172,6 +188,14 @@ public class RestuarantManagement extends javax.swing.JFrame {
             }
         });
 
+        btnReportRestaurants.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnReportRestaurants.setText("Report");
+        btnReportRestaurants.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportRestaurantsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -181,7 +205,8 @@ public class RestuarantManagement extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(106, 106, 106)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnReportRestaurants))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,7 +243,11 @@ public class RestuarantManagement extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnReportRestaurants)))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtRestaurantName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -304,6 +333,14 @@ public class RestuarantManagement extends javax.swing.JFrame {
             }
         });
 
+        BtnReportMenu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        BtnReportMenu.setText("Report");
+        BtnReportMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnReportMenuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -327,17 +364,19 @@ public class RestuarantManagement extends javax.swing.JFrame {
                         .addGap(7, 7, 7)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtRestaurantId, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtItem, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtPrice, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtCategory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
-                        .addGap(50, 50, 50))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(btnPrevious)
                         .addGap(18, 18, 18)
                         .addComponent(btnExitMenu)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(BtnReportMenu)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtRestaurantId, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtItem, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtPrice, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtCategory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)))
+                        .addGap(50, 50, 50))))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(101, 101, 101)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -346,7 +385,9 @@ public class RestuarantManagement extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnReportMenu))
                 .addGap(58, 58, 58)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblRestaurant, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -363,7 +404,7 @@ public class RestuarantManagement extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtCategory)
                     .addComponent(lblCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNextMenu)
                     .addComponent(btnExitMenu)
@@ -442,6 +483,14 @@ public class RestuarantManagement extends javax.swing.JFrame {
             }
         });
 
+        BtnReportOrders.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        BtnReportOrders.setText("Report");
+        BtnReportOrders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnReportOrdersActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -449,22 +498,6 @@ public class RestuarantManagement extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(lblStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblQuanity, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
-                            .addComponent(lblOrderid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblRestauantName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblAmount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(94, 94, 94)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtOrderId)
-                            .addComponent(txtAmount, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtRestaurant, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtStatus, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtQuantity))
-                        .addGap(43, 43, 43))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnAddOrder)
                         .addGap(34, 34, 34)
@@ -475,17 +508,38 @@ public class RestuarantManagement extends javax.swing.JFrame {
                         .addComponent(btnClearOrder)
                         .addGap(33, 33, 33)
                         .addComponent(btnExitOrder)
-                        .addGap(35, 35, 35))))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(125, 125, 125)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(35, 35, 35))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(113, 113, 113)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(BtnReportOrders))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(lblStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lblQuanity, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+                                    .addComponent(lblOrderid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblRestauantName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblAmount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(94, 94, 94)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtOrderId)
+                                    .addComponent(txtAmount, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtRestaurant, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtStatus, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtQuantity))))
+                        .addGap(43, 43, 43))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                    .addComponent(BtnReportOrders))
                 .addGap(36, 36, 36)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblOrderid, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1048,6 +1102,182 @@ public class RestuarantManagement extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAmountActionPerformed
 
+    private void btnReportRestaurantsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportRestaurantsActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Save Restaurants Report");
+        chooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+        chooser.setSelectedFile(new File("restaurants_report_" + java.time.LocalDate.now() + ".pdf"));
+        int option = chooser.showSaveDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            if (!file.getName().toLowerCase().endsWith(".pdf")) file = new File(file.getParentFile(), file.getName() + ".pdf");
+            // Query the DB for all restaurants and build a table model
+            try (Connection con = DBConnection.getConnection();
+                 Statement st = con.createStatement();
+                 ResultSet rs = st.executeQuery("SELECT name, location, capacity, phone FROM restaurants")) {
+                javax.swing.table.DefaultTableModel tm = new javax.swing.table.DefaultTableModel();
+                tm.addColumn("Name");
+                tm.addColumn("Location");
+                tm.addColumn("Capacity");
+                tm.addColumn("Phone");
+                while (rs.next()) {
+                    tm.addRow(new Object[]{rs.getString("name"), rs.getString("location"), rs.getString("capacity"), rs.getString("phone")});
+                }
+                javax.swing.JTable t = new javax.swing.JTable(tm);
+                exportTableToPdf(t, file, "Restaurants Report");
+                JOptionPane.showMessageDialog(this, "Report saved to: " + file.getAbsolutePath());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Failed to generate report: " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnReportRestaurantsActionPerformed
+
+    private void BtnReportMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnReportMenuActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Save Menu Report");
+        chooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+        chooser.setSelectedFile(new File("menu_report_" + java.time.LocalDate.now() + ".pdf"));
+        int option = chooser.showSaveDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            if (!file.getName().toLowerCase().endsWith(".pdf")) file = new File(file.getParentFile(), file.getName() + ".pdf");
+            try (Connection con = DBConnection.getConnection();
+                 Statement st = con.createStatement();
+                 ResultSet rs = st.executeQuery("SELECT restaurant_id, item_name, price, category FROM menu_items")) {
+                javax.swing.table.DefaultTableModel tm = new javax.swing.table.DefaultTableModel();
+                tm.addColumn("Restaurant ID");
+                tm.addColumn("Item");
+                tm.addColumn("Price");
+                tm.addColumn("Category");
+                while (rs.next()) {
+                    tm.addRow(new Object[]{rs.getString("restaurant_id"), rs.getString("item_name"), rs.getString("price"), rs.getString("category")});
+                }
+                javax.swing.JTable t = new javax.swing.JTable(tm);
+                exportTableToPdf(t, file, "Menu Report");
+                JOptionPane.showMessageDialog(this, "Report saved to: " + file.getAbsolutePath());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Failed to generate report: " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_BtnReportMenuActionPerformed
+
+    private void BtnReportOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnReportOrdersActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Save Orders Report");
+        chooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+        chooser.setSelectedFile(new File("orders_report_" + java.time.LocalDate.now() + ".pdf"));
+        int option = chooser.showSaveDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            if (!file.getName().toLowerCase().endsWith(".pdf")) file = new File(file.getParentFile(), file.getName() + ".pdf");
+            try (Connection con = DBConnection.getConnection();
+                 Statement st = con.createStatement();
+                 ResultSet rs = st.executeQuery("SELECT order_id, restaurant_id, total_amount, status, quantity FROM orders")) {
+                javax.swing.table.DefaultTableModel tm = new javax.swing.table.DefaultTableModel();
+                tm.addColumn("Order ID");
+                tm.addColumn("Restaurant ID");
+                tm.addColumn("Amount");
+                tm.addColumn("Status");
+                tm.addColumn("Quantity");
+                while (rs.next()) {
+                    tm.addRow(new Object[]{rs.getString("order_id"), rs.getString("restaurant_id"), rs.getString("total_amount"), rs.getString("status"), rs.getString("quantity")});
+                }
+                javax.swing.JTable t = new javax.swing.JTable(tm);
+                exportTableToPdf(t, file, "Orders Report");
+                JOptionPane.showMessageDialog(this, "Report saved to: " + file.getAbsolutePath());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Failed to generate report: " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_BtnReportOrdersActionPerformed
+
+    // Inline key/value pdf generator
+    private void exportKeyValuePdf(Map<String, String> data, File file, String title) throws IOException {
+        try (PDDocument doc = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.LETTER);
+            doc.addPage(page);
+
+            try (PDPageContentStream cs = new PDPageContentStream(doc, page)) {
+                cs.beginText();
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
+                cs.newLineAtOffset(50, page.getMediaBox().getHeight() - 50);
+                cs.showText(title == null ? "Report" : title);
+                cs.endText();
+
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+                float y = page.getMediaBox().getHeight() - 80;
+                for (Map.Entry<String, String> e : data.entrySet()) {
+                    if (y < 60) {
+                        cs.close();
+                        page = new PDPage(PDRectangle.LETTER);
+                        doc.addPage(page);
+                        y = page.getMediaBox().getHeight() - 50;
+                    }
+                    try (PDPageContentStream cs2 = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true)) {
+                        cs2.beginText();
+                        cs2.newLineAtOffset(50, y);
+                        cs2.showText(e.getKey() + ": " + (e.getValue() == null ? "" : e.getValue()));
+                        cs2.endText();
+                    }
+                    y -= 18;
+                }
+            }
+            doc.save(file);
+        }
+    }
+
+    // Inline table pdf generator
+    private void exportTableToPdf(javax.swing.JTable table, File file, String title) throws IOException {
+        try (PDDocument doc = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.LETTER);
+            doc.addPage(page);
+
+            try (PDPageContentStream cs = new PDPageContentStream(doc, page)) {
+                cs.beginText();
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
+                cs.newLineAtOffset(50, page.getMediaBox().getHeight() - 50);
+                cs.showText(title == null ? "Report" : title);
+                cs.endText();
+
+                float y = page.getMediaBox().getHeight() - 80;
+                float startX = 50;
+                float rowHeight = 14f;
+               cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 11);
+                float x = startX;
+                for (int c = 0; c < table.getColumnCount(); c++) {
+                    cs.beginText();
+                    cs.newLineAtOffset(x, y);
+                    cs.showText(table.getColumnName(c));
+                    cs.endText();
+                    x += 120;
+                }
+                y -= rowHeight;
+
+               cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 10);
+                for (int r = 0; r < table.getRowCount(); r++) {
+                    if (y < 60) {
+                        cs.close();
+                        page = new PDPage(PDRectangle.LETTER);
+                        doc.addPage(page);
+                        y = page.getMediaBox().getHeight() - 50;
+                    }
+                    x = startX;
+                    for (int c = 0; c < table.getColumnCount(); c++) {
+                        Object val = table.getValueAt(r, c);
+                        String text = val == null ? "" : String.valueOf(val);
+                        cs.beginText();
+                        cs.newLineAtOffset(x, y);
+                        cs.showText(text.length() > 30 ? text.substring(0, 27) + "..." : text);
+                        cs.endText();
+                        x += 120;
+                    }
+                    y -= rowHeight;
+                }
+            }
+            doc.save(file);
+        }
+    }
+
     /**
      */
     public static void RestuarantMain() {
@@ -1081,6 +1311,8 @@ public class RestuarantManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnReportMenu;
+    private javax.swing.JButton BtnReportOrders;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnAddOrder;
     private javax.swing.JButton btnAddrestaurant;
@@ -1098,6 +1330,7 @@ public class RestuarantManagement extends javax.swing.JFrame {
     private javax.swing.JButton btnNextRestaurant;
     private javax.swing.JButton btnPrevious;
     private javax.swing.JButton btnPreviousRestaurant;
+    private javax.swing.JButton btnReportRestaurants;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

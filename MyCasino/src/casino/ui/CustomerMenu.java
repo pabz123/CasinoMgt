@@ -9,10 +9,24 @@ package casino.ui;
  * @author PRECIOUS
  */
 import casino.db.DBConnection;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 public class CustomerMenu extends javax.swing.JFrame {
 ResultSet rs;
@@ -78,6 +92,7 @@ ResultSet rs;
         btnNext = new javax.swing.JButton();
         btnPrevious = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        btnReportCustomers = new javax.swing.JButton();
 
         jButton2.setText("jButton2");
 
@@ -195,6 +210,13 @@ ResultSet rs;
             }
         });
 
+        btnReportCustomers.setText("Report");
+        btnReportCustomers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportCustomersActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -208,25 +230,25 @@ ResultSet rs;
                 .addComponent(btnExit)
                 .addGap(55, 55, 55))
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
                         .addComponent(btnAddCustomeer)
-                        .addGap(41, 41, 41)
-                        .addComponent(btnUpdate)
-                        .addGap(44, 44, 44)
-                        .addComponent(btnNext)
-                        .addGap(52, 52, 52)
-                        .addComponent(btnPrevious)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnClear)
-                        .addGap(48, 48, 48)
-                        .addComponent(btnDelete)
                         .addGap(18, 18, 18)
+                        .addComponent(btnUpdate)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnNext)
+                        .addGap(35, 35, 35)
+                        .addComponent(btnPrevious)
+                        .addGap(28, 28, 28)
+                        .addComponent(btnClear)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnDelete)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnReportCustomers)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRefresh))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -247,7 +269,8 @@ ResultSet rs;
                     .addComponent(btnRefresh)
                     .addComponent(btnNext)
                     .addComponent(btnPrevious)
-                    .addComponent(btnClear))
+                    .addComponent(btnClear)
+                    .addComponent(btnReportCustomers))
                 .addGap(45, 45, 45))
         );
 
@@ -411,6 +434,99 @@ ResultSet rs;
         }
     }//GEN-LAST:event_btnNextActionPerformed
 
+    private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
+        int selectedRow = TabCustomers.getSelectedRow();
+        if (selectedRow > 0) {
+            TabCustomers.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
+            TabCustomers.scrollRectToVisible(TabCustomers.getCellRect(selectedRow - 1, 0, true));
+        } else {
+            JOptionPane.showMessageDialog(this, "Already at the first customer.");
+        }
+    }//GEN-LAST:event_btnPreviousActionPerformed
+
+    private void btnReportCustomersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportCustomersActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Save Customers Report");
+        chooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+        chooser.setSelectedFile(new File("customers_report_" + java.time.LocalDate.now() + ".pdf"));
+        int option = chooser.showSaveDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            if (!file.getName().toLowerCase().endsWith(".pdf")) {
+                file = new File(file.getParentFile(), file.getName() + ".pdf");
+            }
+            try {
+                exportTableToPdf(TabCustomers, file, "Customers Report");
+                JOptionPane.showMessageDialog(this, "Report saved to: " + file.getAbsolutePath());
+            } catch (NoClassDefFoundError | Exception ex) {
+                String msg = ex instanceof NoClassDefFoundError ?
+                        "PDFBox not found on classpath. Add org.apache.pdfbox:pdfbox to your project." : ex.getMessage();
+                JOptionPane.showMessageDialog(this, "Failed to generate report: " + msg);
+            }
+        }
+    }//GEN-LAST:event_btnReportCustomersActionPerformed
+
+    // Inline PDF export helper for table
+    private void exportTableToPdf(javax.swing.JTable table, File file, String title) throws IOException {
+        try (PDDocument doc = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.LETTER);
+            doc.addPage(page);
+
+            try (PDPageContentStream cs = new PDPageContentStream(doc, page)) {
+                cs.beginText();
+               cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
+                cs.newLineAtOffset(50, page.getMediaBox().getHeight() - 50);
+                cs.showText(title == null ? "Report" : title);
+                cs.endText();
+
+                cs.beginText();
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 9);
+                cs.newLineAtOffset(50, page.getMediaBox().getHeight() - 70);
+                cs.showText("Generated: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                cs.endText();
+
+                float y = page.getMediaBox().getHeight() - 100;
+                float startX = 50;
+                float rowHeight = 14f;
+
+                // Header
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 10);
+                float x = startX;
+                for (int c = 0; c < table.getColumnCount(); c++) {
+                    cs.beginText();
+                    cs.newLineAtOffset(x, y);
+                    cs.showText(table.getColumnName(c));
+                    cs.endText();
+                    x += 110;
+                }
+                y -= rowHeight;
+
+                // Rows
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 9);
+                for (int r = 0; r < table.getRowCount(); r++) {
+                    if (y < 60) {
+                        cs.close();
+                        page = new PDPage(PDRectangle.LETTER);
+                        doc.addPage(page);
+                        y = page.getMediaBox().getHeight() - 50;
+                    }
+                    x = startX;
+                    for (int c = 0; c < table.getColumnCount(); c++) {
+                        Object val = table.getValueAt(r, c);
+                        String text = val == null ? "" : String.valueOf(val);
+                        cs.beginText();
+                        cs.newLineAtOffset(x, y);
+                        cs.showText(text.length() > 30 ? text.substring(0, 27) + "..." : text);
+                        cs.endText();
+                        x += 110;
+                    }
+                    y -= rowHeight;
+                }
+            }
+            doc.save(file);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -456,19 +572,11 @@ ResultSet rs;
     private javax.swing.JButton btnNext;
     private javax.swing.JButton btnPrevious;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnReportCustomers;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
-    // Select previous customer in the table
-    private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {
-        int selectedRow = TabCustomers.getSelectedRow();
-        if (selectedRow > 0) {
-            TabCustomers.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
-            TabCustomers.scrollRectToVisible(TabCustomers.getCellRect(selectedRow - 1, 0, true));
-        } else {
-            JOptionPane.showMessageDialog(this, "Already at the first customer.");
-        }
-    }
+   
 }

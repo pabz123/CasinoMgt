@@ -5,6 +5,15 @@
 package casino.ui;
 
 import casino.db.DBConnection;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 /**
  *
@@ -70,11 +80,14 @@ public class Cashier extends javax.swing.JFrame {
         txtTxnAmount = new javax.swing.JTextField();
         txtTxnType = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        btnPrintReportTxn = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         SummaryTable = new javax.swing.JTable();
         btnRefresh = new javax.swing.JButton();
         btnExitSummary = new javax.swing.JButton();
+        btnReportSummary = new javax.swing.JButton();
+        btnExportSummaryReport = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         lblCashier = new javax.swing.JLabel();
         lblTimeIn = new javax.swing.JLabel();
@@ -143,42 +156,51 @@ public class Cashier extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
         jLabel2.setText("Daily Transactions ");
 
+        btnPrintReportTxn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnPrintReportTxn.setText("Print Report");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(113, 113, 113)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPrintReportTxn))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(btnEnter)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnClear))
                             .addComponent(lblTxnId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblTxnAmount, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                             .addComponent(lblTxnType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(44, 44, 44)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTxnId)
-                            .addComponent(txtTxnType)
-                            .addComponent(txtTxnAmount)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnEnter)
-                        .addGap(63, 63, 63)
-                        .addComponent(btnClear)
-                        .addGap(70, 70, 70)
-                        .addComponent(btnDelete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                        .addComponent(btnCancel)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtTxnId)
+                                    .addComponent(txtTxnType)
+                                    .addComponent(txtTxnAmount)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(76, 76, 76)
+                                .addComponent(btnDelete)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCancel)))))
                 .addGap(44, 44, 44))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(113, 113, 113)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPrintReportTxn))
                 .addGap(32, 32, 32)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTxnId, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -243,17 +265,65 @@ public class Cashier extends javax.swing.JFrame {
             }
         });
 
+        btnReportSummary.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnReportSummary.setText("Report");
+        btnReportSummary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setDialogTitle("Save Summary Report");
+                chooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+                chooser.setSelectedFile(new File("summary_report_" + java.time.LocalDate.now() + ".pdf"));
+                int option = chooser.showSaveDialog(null);
+                if (option == JFileChooser.APPROVE_OPTION) {
+                    File file = chooser.getSelectedFile();
+                    if (!file.getName().toLowerCase().endsWith(".pdf")) file = new File(file.getParentFile(), file.getName() + ".pdf");
+                    try {
+                        exportTableToPdf(SummaryTable, file, "Transactions Summary");
+                        javax.swing.JOptionPane.showMessageDialog(null, "Report saved to: " + file.getAbsolutePath());
+                    } catch (Exception ex) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Failed to generate report: " + ex.getMessage());
+                    }
+                }
+            }
+        });
+
+        btnExportSummaryReport.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnExportSummaryReport.setText("Export Report");
+        btnExportSummaryReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setDialogTitle("Export Summary Report (PDF)");
+                chooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+                chooser.setSelectedFile(new File("summary_export_" + java.time.LocalDate.now() + ".pdf"));
+                int option = chooser.showSaveDialog(null);
+                if (option == JFileChooser.APPROVE_OPTION) {
+                    File file = chooser.getSelectedFile();
+                    if (!file.getName().toLowerCase().endsWith(".pdf")) file = new File(file.getParentFile(), file.getName() + ".pdf");
+                    try {
+                        exportTableToPdf(SummaryTable, file, "Transactions Summary Export");
+                        javax.swing.JOptionPane.showMessageDialog(null, "Exported report to: " + file.getAbsolutePath());
+                    } catch (Exception ex) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Failed to export report: " + ex.getMessage());
+                    }
+                }
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(btnRefresh)
+                .addGap(56, 56, 56)
+                .addComponent(btnReportSummary)
+                .addGap(51, 51, 51)
+                .addComponent(btnExportSummaryReport)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnExitSummary)
                 .addGap(42, 42, 42))
@@ -266,7 +336,9 @@ public class Cashier extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRefresh)
-                    .addComponent(btnExitSummary))
+                    .addComponent(btnExitSummary)
+                    .addComponent(btnReportSummary)
+                    .addComponent(btnExportSummaryReport))
                 .addGap(31, 31, 31))
         );
 
@@ -331,7 +403,7 @@ public class Cashier extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(123, 123, 123)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 171, Short.MAX_VALUE))
+                .addGap(0, 179, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -622,9 +694,12 @@ LoadSummaryData();
     private javax.swing.JButton btnEnter;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnExitSummary;
+    private javax.swing.JButton btnExportSummaryReport;
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnNext;
+    private javax.swing.JButton btnPrintReportTxn;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnReportSummary;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -674,5 +749,66 @@ LoadSummaryData();
         }
         
         
+    }
+
+    // Inline PDF export helper for table
+    private void exportTableToPdf(javax.swing.JTable table, File file, String title) throws IOException {
+        try (PDDocument doc = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.LETTER);
+            doc.addPage(page);
+
+            try (PDPageContentStream cs = new PDPageContentStream(doc, page)) {
+                cs.beginText();
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
+                cs.newLineAtOffset(50, page.getMediaBox().getHeight() - 50);
+                cs.showText(title == null ? "Report" : title);
+                cs.endText();
+
+                cs.beginText();
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 9);
+                cs.newLineAtOffset(50, page.getMediaBox().getHeight() - 70);
+                cs.showText("Generated: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                cs.endText();
+
+                float y = page.getMediaBox().getHeight() - 100;
+                float startX = 50;
+                float rowHeight = 14f;
+
+                // Header
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 10);
+                float x = startX;
+                for (int c = 0; c < table.getColumnCount(); c++) {
+                    cs.beginText();
+                    cs.newLineAtOffset(x, y);
+                    cs.showText(table.getColumnName(c));
+                    cs.endText();
+                    x += 110;
+                }
+                y -= rowHeight;
+
+                // Rows
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 9);
+                for (int r = 0; r < table.getRowCount(); r++) {
+                    if (y < 60) {
+                        cs.close();
+                        page = new PDPage(PDRectangle.LETTER);
+                        doc.addPage(page);
+                        y = page.getMediaBox().getHeight() - 50;
+                    }
+                    x = startX;
+                    for (int c = 0; c < table.getColumnCount(); c++) {
+                        Object val = table.getValueAt(r, c);
+                        String text = val == null ? "" : String.valueOf(val);
+                        cs.beginText();
+                        cs.newLineAtOffset(x, y);
+                        cs.showText(text.length() > 30 ? text.substring(0, 27) + "..." : text);
+                        cs.endText();
+                        x += 110;
+                    }
+                    y -= rowHeight;
+                }
+            }
+            doc.save(file);
+        }
     }
 }

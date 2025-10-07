@@ -15,10 +15,20 @@ import casino.db.DBConnection;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 
 public class EmployeeMenu extends javax.swing.JFrame {
@@ -85,6 +95,7 @@ public class EmployeeMenu extends javax.swing.JFrame {
         btnNext = new javax.swing.JButton();
         btnPrevious = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        btnReport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -181,31 +192,37 @@ public class EmployeeMenu extends javax.swing.JFrame {
         });
 
         btnNext.setText("Next");
+        btnNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextActionPerformed(evt);
+            }
+        });
 
         btnPrevious.setText("Previous");
+        btnPrevious.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreviousActionPerformed(evt);
+            }
+        });
 
         btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        btnReport.setText("Report");
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(BtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnUpdate)
-                .addGap(27, 27, 27)
-                .addComponent(btnNext)
-                .addGap(29, 29, 29)
-                .addComponent(btnPrevious)
-                .addGap(18, 18, 18)
-                .addComponent(btnClear)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BtnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31))
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(btnBack)
@@ -214,10 +231,29 @@ public class EmployeeMenu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(32, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(BtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnUpdate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnNext)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnPrevious)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnClear)
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnReport)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 14, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,16 +270,17 @@ public class EmployeeMenu extends javax.swing.JFrame {
                         .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(19, 19, 19)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnAdd)
                     .addComponent(btnUpdate)
-                    .addComponent(BtnDelete)
-                    .addComponent(btnRefresh)
                     .addComponent(btnNext)
                     .addComponent(btnPrevious)
-                    .addComponent(btnClear))
-                .addGap(18, 18, 18))
+                    .addComponent(btnClear)
+                    .addComponent(BtnDelete)
+                    .addComponent(btnRefresh)
+                    .addComponent(btnReport))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();
@@ -383,6 +420,26 @@ public class EmployeeMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BtnDeleteActionPerformed
 
+    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Save Employees Report");
+        chooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+        chooser.setSelectedFile(new File("employees_report_" + java.time.LocalDate.now() + ".pdf"));
+        int option = chooser.showSaveDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            if (!file.getName().toLowerCase().endsWith(".pdf")) {
+                file = new File(file.getParentFile(), file.getName() + ".pdf");
+            }
+            try {
+                exportTableToPdf(TabEmployees, file, "Employees Report");
+                JOptionPane.showMessageDialog(this, "Report saved to: " + file.getAbsolutePath());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Failed to generate report: " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnReportActionPerformed
+
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         LoadEmployeeData();
     }//GEN-LAST:event_btnRefreshActionPerformed
@@ -395,6 +452,35 @@ public class EmployeeMenu extends javax.swing.JFrame {
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
+        int selectedRow = TabEmployees.getSelectedRow();
+        int rowCount = TabEmployees.getRowCount();
+        if (selectedRow < rowCount - 1 && selectedRow != -1) {
+            TabEmployees.setRowSelectionInterval(selectedRow + 1, selectedRow + 1);
+            TabEmployees.scrollRectToVisible(TabEmployees.getCellRect(selectedRow + 1, 0, true));
+        } else if (rowCount > 0 && selectedRow == -1) {
+            // If nothing is selected, select the first row
+            TabEmployees.setRowSelectionInterval(0, 0);
+            TabEmployees.scrollRectToVisible(TabEmployees.getCellRect(0, 0, true));
+        } else {
+            JOptionPane.showMessageDialog(this, "Already at the last Employee.");
+        }
+    }//GEN-LAST:event_btnNextActionPerformed
+
+    private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
+       int selectedRow = TabEmployees.getSelectedRow();
+        if (selectedRow > 0) {
+            TabEmployees.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
+            TabEmployees.scrollRectToVisible(TabEmployees.getCellRect(selectedRow - 1, 0, true));
+        } else {
+            JOptionPane.showMessageDialog(this, "Already at the first Employee.");
+        }
+    }//GEN-LAST:event_btnPreviousActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+      TabEmployees.clearSelection();
+    }//GEN-LAST:event_btnClearActionPerformed
 
     /**
      */
@@ -424,9 +510,71 @@ public class EmployeeMenu extends javax.swing.JFrame {
     private javax.swing.JButton btnNext;
     private javax.swing.JButton btnPrevious;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    // Inline PDF export helper for table
+    private void exportTableToPdf(javax.swing.JTable table, File file, String title) throws IOException {
+        try (PDDocument doc = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.LETTER);
+            doc.addPage(page);
+
+            try (PDPageContentStream cs = new PDPageContentStream(doc, page)) {
+                cs.beginText();
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
+                cs.newLineAtOffset(50, page.getMediaBox().getHeight() - 50);
+                cs.showText(title == null ? "Report" : title);
+                cs.endText();
+
+                cs.beginText();
+               cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 9);
+                cs.newLineAtOffset(50, page.getMediaBox().getHeight() - 70);
+                cs.showText("Generated: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                cs.endText();
+
+                float y = page.getMediaBox().getHeight() - 100;
+                float startX = 50;
+                float rowHeight = 14f;
+
+                // Header
+                cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 10);
+                float x = startX;
+                for (int c = 0; c < table.getColumnCount(); c++) {
+                    cs.beginText();
+                    cs.newLineAtOffset(x, y);
+                    cs.showText(table.getColumnName(c));
+                    cs.endText();
+                    x += 110;
+                }
+                y -= rowHeight;
+
+                // Rows
+               cs.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 9);
+                for (int r = 0; r < table.getRowCount(); r++) {
+                    if (y < 60) {
+                        cs.close();
+                        page = new PDPage(PDRectangle.LETTER);
+                        doc.addPage(page);
+                        y = page.getMediaBox().getHeight() - 50;
+                    }
+                    x = startX;
+                    for (int c = 0; c < table.getColumnCount(); c++) {
+                        Object val = table.getValueAt(r, c);
+                        String text = val == null ? "" : String.valueOf(val);
+                        cs.beginText();
+                        cs.newLineAtOffset(x, y);
+                        cs.showText(text.length() > 30 ? text.substring(0, 27) + "..." : text);
+                        cs.endText();
+                        x += 110;
+                    }
+                    y -= rowHeight;
+                }
+            }
+            doc.save(file);
+        }
+    }
 
 }
